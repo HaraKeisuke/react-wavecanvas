@@ -6,13 +6,14 @@ class Canvas extends Component {
 
   componentDidMount() {
     this.context = this.canvas.getContext("2d");
-    this.context.fillStyle = "rgb(255, 255, 255)";
+    this.context.fillStyle = this.props.color;
     if (this.props.buffer.length > 0) {
       this.drawCanvas(this.props.buffer);
     }
   }
 
   componentWillReceiveProps(nextProps) {
+    this.context.fillStyle = this.props.color;
     if (this.props.buffer !== nextProps.buffer && nextProps.buffer.length > 0) {
       this.drawCanvas(nextProps.buffer);
     }
@@ -42,8 +43,8 @@ class Canvas extends Component {
         ref={ref => {
           this.canvas = ref;
         }}
-        width={500}
-        height={200}
+        width={this.props.width}
+        height={this.props.height}
       />
     );
   }
