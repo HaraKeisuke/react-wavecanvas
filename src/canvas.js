@@ -24,7 +24,15 @@ class Canvas extends Component {
     }
   }
 
-  drawCanvas(buffer) {
+  componentDidUpdate() {
+    this.drawCanvas(this.props.buffer);
+  }
+
+  refresh(position) {
+    this.drawCanvas(this.props.buffer, position);
+  }
+
+  drawCanvas(buffer, playedPosition = this.props.playedPosition) {
     this.context = this.canvas.getContext("2d");
     this.context.beginPath();
 
@@ -33,7 +41,7 @@ class Canvas extends Component {
     let halfHeight = height / 2;
 
     for (let i = 0; i < buffer.length; i++) {
-      if (i < this.props.playedPosition) {
+      if (i < playedPosition) {
         this.context.fillStyle = this.props.seekColor;
       } else {
         this.context.fillStyle = this.props.color;
@@ -49,12 +57,18 @@ class Canvas extends Component {
     }
   }
 
+  onClickCanvas(e) {
+    let x = e.clientX - e.target.getBoundingClientRect().left;
+    this.props.onSeek(x / this.props.width);
+  }
+
   render() {
     return (
       <canvas
         ref={ref => {
           this.canvas = ref;
         }}
+        onClick={this.onClickCanvas.bind(this)}
         width={this.props.width}
         height={this.props.height}
       />

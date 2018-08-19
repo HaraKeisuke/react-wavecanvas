@@ -6,7 +6,14 @@ class WaveCanvas extends Component {
   timer = null;
   node = null;
   startTime = 0;
-  state = { audio: null, context: null, seekPosition: 0, duration: 0 };
+  canvas = null;
+  state = {
+    audio: null,
+    context: null,
+    seekPosition: 0,
+    duration: 0,
+    isPlaying: false
+  };
 
   componentDidMount() {
     this.loadAudio();
@@ -27,24 +34,34 @@ class WaveCanvas extends Component {
     });
   }
 
-  play() {
-    if (this.node) {
-      this.pause();
+  play(isResume = false) {
+    if (this.state.isPlaying && !isResume) {
+      return;
     }
     this.node = this.state.audio.getAudioNode();
     this.node.connect(this.state.context.destination);
     this.node.start(0, this.state.seekPosition);
+    this.setState({ isPlaying: true });
     this.setTimer();
   }
 
   pause() {
+    if (!this.node) {
+      return;
+    }
+
     this.node.stop(0);
+    this.setState({ isPlaying: false });
     this.removeTimer();
   }
 
   stop() {
+    if (!this.node) {
+      return;
+    }
+
     this.node.stop(0);
-    this.setState({ seekPosition: 0 });
+    this.setState({ seekPosition: 0, isPlaying: false });
     this.removeTimer();
   }
 
@@ -63,15 +80,25 @@ class WaveCanvas extends Component {
     this.timer = null;
   }
 
-  getPlayedPosition(division) {
-    if (this.state.seekPosition === 0) {
+  getPlayedPosition(division, seekPosition = this.state.seekPosition) {
+    if (seekPosition === 0) {
       return 0;
     }
-    let _seek = Math.floor(this.state.seekPosition * 100);
+    let _seek = Math.floor(seekPosition * 100);
     let _duration = Math.floor(this.state.duration * 100);
 
     let _range = _seek / _duration;
     return division * _range;
+  }
+
+  onSeek(seek) {
+    let _isPlaying = this.state.isPlaying;
+    let seekPosition = this.state.duration * seek;
+    this.pause();
+    this.setState({ seekPosition: seekPosition });
+    if (_isPlaying) {
+      this.play(true);
+    }
   }
 
   render() {
@@ -89,12 +116,14 @@ class WaveCanvas extends Component {
     return (
       <div>
         <Canvas
+          ref={ref => (this.canvas = ref)}
           buffer={audio.getCanvasBuffer(division)}
           color={color}
           seekColor={seekColor}
           playedPosition={this.getPlayedPosition(division)}
           width={width}
           height={height}
+          onSeek={this.onSeek.bind(this)}
         />
       </div>
     );
