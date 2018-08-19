@@ -1,0 +1,8 @@
+{
+  "short_name": "react-wavecanvas",
+  "name": "react-wavecanvas",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
