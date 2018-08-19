@@ -1,5 +1,10 @@
 export default class Audio {
   buffer;
+  context;
+
+  constructor(context) {
+    this.context = context;
+  }
 
   load(url) {
     return new Promise((resolve, reject) => {
@@ -8,8 +13,7 @@ export default class Audio {
       req.responseType = "arraybuffer";
       req.onload = () => {
         if (req.response) {
-          let ctx = new AudioContext();
-          ctx.decodeAudioData(req.response).then(b => {
+          this.context.decodeAudioData(req.response).then(b => {
             this.buffer = b;
             resolve();
           }, reject);
@@ -19,9 +23,12 @@ export default class Audio {
     });
   }
 
+  getDuration() {
+    return this.buffer.duration;
+  }
+
   getAudioNode() {
-    let ctx = new AudioContext();
-    let node = ctx.createBufferSource();
+    let node = this.context.createBufferSource();
     node.buffer = this.buffer;
     return node;
   }
