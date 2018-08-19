@@ -6,6 +6,9 @@
 
 This project is a library for visualizing music using React.js.
 
+Let's Try Example
+https://harakeisuke.github.io/react-wavecanvas/
+
 ## Install & Example
 
 Install
