@@ -12,7 +12,7 @@ export default class App extends Component {
         <div onClick={this.stop.bind(this)}>Stop</div>
         <WaveCanvas
           ref={ref => (this.wavecanvas = ref)}
-          url="http://localhost:3000/sample.mp3"
+          url={location.origin + "/sample.mp3"}
           color={"white"}
           seekColor={"red"}
         />
@@ -20,15 +20,15 @@ export default class App extends Component {
     );
   }
 
-  play(){
+  play() {
     this.wavecanvas.play();
   }
 
-  pause(){
+  pause() {
     this.wavecanvas.pause();
   }
 
-  stop(){
+  stop() {
     this.wavecanvas.stop();
   }
 }
