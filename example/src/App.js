@@ -12,7 +12,7 @@ export default class App extends Component {
         <div onClick={this.stop.bind(this)}>Stop</div>
         <WaveCanvas
           ref={ref => (this.wavecanvas = ref)}
-          url={window.location.origin + "/sample.mp3"}
+          url={"https://harakeisuke.github.io/react-wavecanvas/sample.mp3"}
           color={"white"}
           seekColor={"red"}
         />
