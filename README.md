@@ -36,6 +36,7 @@ export default class App extends Component {
           color={"blue"} // text or rgb format (ex. rgb(0, 0, 0)
           width={500}
           height={200}
+          isCursorShow={true}
         />
       </div>
     );
@@ -50,6 +51,7 @@ export default class App extends Component {
 |color|text format or rgb format. ex.) blue red rgb(0,0,0)|
 |width|Width of canvas element.|
 |height|Height of canvas element.|
+|isCursorShow|Seek cursor visibllity turn on/off.
 
 
 ## License

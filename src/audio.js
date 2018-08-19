@@ -3,53 +3,60 @@ export default class Audio {
 
   load(url) {
     return new Promise((resolve, reject) => {
-      var req = new XMLHttpRequest()
-      req.open('GET', url, true)
-      req.responseType = "arraybuffer"
+      var req = new XMLHttpRequest();
+      req.open("GET", url, true);
+      req.responseType = "arraybuffer";
       req.onload = () => {
         if (req.response) {
-          let ctx = new AudioContext()
+          let ctx = new AudioContext();
           ctx.decodeAudioData(req.response).then(b => {
-            this.buffer = b
-            resolve()
-          }, reject)
+            this.buffer = b;
+            resolve();
+          }, reject);
         }
-      }
-      req.send()
-    })
+      };
+      req.send();
+    });
   }
 
-  getCanvasBuffer(division = 150, type = 'normal') {
-    let data = this.buffer.getChannelData(0)
-    let buffer = []
-    let unit = Math.floor(this.buffer.length / division)
+  getAudioNode() {
+    let ctx = new AudioContext();
+    let node = ctx.createBufferSource();
+    node.buffer = this.buffer;
+    return node;
+  }
+
+  getCanvasBuffer(division = 150, type = "normal") {
+    let data = this.buffer.getChannelData(0);
+    let buffer = [];
+    let unit = Math.floor(this.buffer.length / division);
     for (let i = 0; i < division; i++) {
       if (i === 0) {
         buffer[i] =
           Math.abs(data[i * unit] + Math.abs(data[(i + 1) * unit])) / 2;
-        continue
+        continue;
       }
       if (i === division) {
         buffer[i] =
           Math.abs(data[i * unit] + Math.abs(data[(i - 1) * unit])) / 2;
-        continue
+        continue;
       }
 
-      if (type === 'normal') {
-        let count = 0
+      if (type === "normal") {
+        let count = 0;
         for (let j = 1; j < unit; j++) {
-          count += Math.abs(data[i * unit + j])
+          count += Math.abs(data[i * unit + j]);
         }
-        buffer[i] = count / unit
+        buffer[i] = count / unit;
       } else {
         buffer[i] =
           Math.abs(
             data[i * unit] +
               Math.abs(data[(i + 1) * unit]) +
               Math.abs(data[(i - 1) * unit])
-          ) / 3
+          ) / 3;
       }
     }
-    return buffer
+    return buffer;
   }
 }
