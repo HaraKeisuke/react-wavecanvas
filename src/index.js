@@ -1,22 +1,25 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from "react";
+import Audio from "./audio";
+import Canvas from "./canvas";
 
-import styles from './styles.css'
+class WaveCanvas extends Component {
+  state = { buffer: [] };
 
-export default class ExampleComponent extends Component {
-  static propTypes = {
-    text: PropTypes.string
+  componentDidMount() {
+    let audio = new Audio();
+    audio.load(this.props.url).then(() => {
+      let buffer = audio.getCanvasBuffer();
+      this.setState({ buffer: buffer });
+    });
   }
 
   render() {
-    const {
-      text
-    } = this.props
-
     return (
-      <div className={styles.test}>
-        Example Component: {text}
+      <div>
+        <Canvas buffer={this.state.buffer} />
       </div>
-    )
+    );
   }
 }
+
+export default WaveCanvas;

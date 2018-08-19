@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 
-import ExampleComponent from 'react-wavecanvas'
+import WaveCanvas from 'react-wavecanvas'
 
 export default class App extends Component {
   render () {
     return (
       <div>
-        <ExampleComponent text='Modern React component module' />
+        <WaveCanvas url='http://localhost:3000/sample.mp3' />
       </div>
     )
   }
