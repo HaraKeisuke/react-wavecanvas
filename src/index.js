@@ -26,6 +26,7 @@ class WaveCanvas extends Component {
   }
 
   loadAudio() {
+    var AudioContext = window.AudioContext || window.webkitAudioContext || window.mozAudioContext;;
     let context = this.props.context || new AudioContext();
     this.setState({ context: context });
     let audio = new Audio(context);

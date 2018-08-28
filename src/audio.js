@@ -13,10 +13,15 @@ export default class Audio {
       req.responseType = "arraybuffer";
       req.onload = () => {
         if (req.response) {
-          this.context.decodeAudioData(req.response).then(b => {
-            this.buffer = b;
-            resolve();
-          }, reject);
+          alert(req.response);
+          this.context.decodeAudioData(
+            req.response,
+            b => {
+              this.buffer = b;
+              resolve();
+            },
+            reject
+          );
         }
       };
       req.send();
